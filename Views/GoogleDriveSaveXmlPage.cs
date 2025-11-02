@@ -7,7 +7,7 @@ namespace XMLParser.Views
         public GoogleDriveSaveXmlPage(string fileData, string fileName)
             : base(fileData, EnsureExtension(fileName), ".xml")
         {
-            Title = "Save XML to Google Drive";
+            Title = "Зберегти XML на Google Drive";
         }
 
         private static string EnsureExtension(string name)

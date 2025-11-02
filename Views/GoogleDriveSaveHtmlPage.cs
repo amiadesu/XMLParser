@@ -7,7 +7,7 @@ namespace XMLParser.Views
         public GoogleDriveSaveHtmlPage(string fileData, string fileName)
             : base(fileData, EnsureExtension(fileName), ".html")
         {
-            Title = "Save HTML to Google Drive";
+            Title = "Зберегти HTML на Google Drive";
         }
 
         private static string EnsureExtension(string name)
