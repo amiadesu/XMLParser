@@ -28,7 +28,7 @@ public sealed class SaxSearchStrategy : IXmlSearchStrategy
         {
             if (ct.IsCancellationRequested) break;
 
-            var sm = await ReadStudent(reader, keyword, ct);
+            var sm = ReadStudent(reader, keyword, ct);
             if (sm != null && MatchAttrs(sm.Attributes.ToDictionary(), attributeFilters))
             {
                 events.Add(sm);
@@ -58,7 +58,7 @@ public sealed class SaxSearchStrategy : IXmlSearchStrategy
         return dict;
     }
     
-    private async Task<StudentModel?> ReadStudent(XmlReader reader, string keyword, CancellationToken ct = default)
+    private StudentModel? ReadStudent(XmlReader reader, string keyword, CancellationToken ct = default)
     {
         if (reader.NodeType != XmlNodeType.Element || reader.Name != "student")
         {

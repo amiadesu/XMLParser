@@ -1,5 +1,6 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:XMLParser.Views"
              x:Class="XMLParser.Views.XmlWorkPage"
              x:Name="RootPage"
              BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1C1C1E}"
@@ -80,14 +81,14 @@
                     <VerticalStackLayout Spacing="10">
                         <Label Text="Пошук" FontAttributes="Bold" FontSize="16" />
 
-                        <Entry Placeholder="Ключове слово" Text="{Binding Keyword}" />
+                        <Entry x:DataType="viewmodels:XmlWorkViewModel" Placeholder="Ключове слово" Text="{Binding Keyword}" />
                         <Label Text="Оберіть атрибут"
                             FontSize="14"
                             FontAttributes="Bold"
                             TextColor="{AppThemeBinding Light=#000000, Dark=#FFFFFF}"
                             Margin="0,0,0,5" />
                         <Grid ColumnDefinitions="160,*" HeightRequest="44" HorizontalOptions="FillAndExpand">
-                            <Picker
+                            <Picker x:DataType="viewmodels:XmlWorkViewModel"
                                 Grid.Column="0"
                                 ItemsSource="{Binding AttrKeys}"
                                 SelectedItem="{Binding SelectedAttrKey}"
@@ -97,7 +98,7 @@
                                 HorizontalOptions="Fill"
                                 Margin="0" />
 
-                            <Entry
+                            <Entry x:DataType="viewmodels:XmlWorkViewModel"
                                 Grid.Column="1"
                                 Placeholder="Значення"
                                 Text="{Binding NewAttrValue}"
@@ -109,7 +110,8 @@
                                 HeightRequest="44" />
                         </Grid>
 
-                        <Button Text="Додати фільтр"
+                        <Button x:DataType="viewmodels:XmlWorkViewModel"
+                                Text="Додати фільтр"
                                 BackgroundColor="#7C3AED"
                                 TextColor="White"
                                 CornerRadius="10"
@@ -122,18 +124,24 @@
                     <Label Text="Результати"
                            FontAttributes="Bold"
                            FontSize="16" />
-                    <CollectionView ItemsSource="{Binding ResultLines}" IsVisible="{Binding IsResultsVisible}">
+                    <CollectionView x:DataType="viewmodels:XmlWorkViewModel" 
+                                    ItemsSource="{Binding ResultLines}" 
+                                    IsVisible="{Binding IsResultsVisible}">
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
                                 <Border BackgroundColor="{AppThemeBinding Light=#F2F2F7, Dark=#3A3A3C}"
                                        Padding="10"
                                        Margin="0,4,0,0">
-                                    <Label Text="{Binding .}" FontSize="13" LineBreakMode="WordWrap" />
+                                    <Label x:DataType="viewmodels:XmlWorkViewModel" 
+                                            Text="{Binding .}" 
+                                            FontSize="13" 
+                                            LineBreakMode="WordWrap" />
                                 </Border>
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
                     </CollectionView>
-                    <Label Text="{Binding VisualText}"
+                    <Label x:DataType="viewmodels:XmlWorkViewModel"
+                           Text="{Binding VisualText}"
                            FontSize="14"
                            TextColor="{AppThemeBinding Light=#000000, Dark=#FFFFFF}"
                            HorizontalOptions="Center"
@@ -154,18 +162,20 @@
                                FontAttributes="Bold"
                                FontSize="16" />
 
-                        <CollectionView ItemsSource="{Binding ActiveFilters}">
+                        <CollectionView x:DataType="viewmodels:XmlWorkViewModel" ItemsSource="{Binding ActiveFilters}">
                             <CollectionView.ItemTemplate>
                                 <DataTemplate>
                                     <Border BackgroundColor="#E6DEFF"
                                            Padding="6"
                                            Margin="0,3,0,0">
                                         <HorizontalStackLayout VerticalOptions="Center">
-                                            <Label Text="{Binding Display}"
+                                            <Label x:DataType="viewmodels:FilterItem"
+                                                   Text="{Binding Display}"
                                                    VerticalOptions="Center"
                                                    FontSize="13"
                                                    LineBreakMode="TailTruncation" />
-                                            <Button Text="✕"
+                                            <Button x:DataType="viewmodels:FilterItem"
+                                                    Text="✕"
                                                     FontSize="12"
                                                     BackgroundColor="Transparent"
                                                     TextColor="Red"
@@ -180,7 +190,8 @@
                             </CollectionView.ItemTemplate>
                         </CollectionView>
 
-                        <Button Text="Очистити фільтри"
+                        <Button x:DataType="viewmodels:XmlWorkViewModel"
+                                Text="Очистити фільтри"
                                 BackgroundColor="{AppThemeBinding Light=#E5E5EA, Dark=#3A3A3C}"
                                 TextColor="{AppThemeBinding Light=#000000, Dark=#FFFFFF}"
                                 CornerRadius="10"
@@ -195,7 +206,8 @@
                         <Label Text="Алгоритм пошуку"
                                FontAttributes="Bold"
                                FontSize="16" />
-                        <Picker Title="Обрати стратегію"
+                        <Picker x:DataType="viewmodels:XmlWorkViewModel"
+                                Title="Обрати стратегію"
                                 ItemsSource="{Binding Strategies}"
                                 SelectedItem="{Binding SelectedStrategy}" />
                     </VerticalStackLayout>
