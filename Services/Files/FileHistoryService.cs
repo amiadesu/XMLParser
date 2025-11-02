@@ -10,34 +10,35 @@ namespace XMLParser.FileSystem;
 
 public static class FileHistoryService
 {
-    private static readonly string HistoryFileName = Literals.defaultHistoryFileName;
+    private static readonly string HistoryDirectory = Path.Combine(MauiFileSystem.AppDataDirectory, "history");
 
-    private static string GetHistoryFilePath()
+    private static string GetHistoryFilePath(string key)
     {
-        return Path.Combine(MauiFileSystem.AppDataDirectory, HistoryFileName);
+        Directory.CreateDirectory(HistoryDirectory);
+        return Path.Combine(HistoryDirectory, $"{key}.txt");
     }
 
-    public static async Task AddEntryAsync(string fileName, string filePath)
+    public static async Task AddEntryAsync(string key, string fileName, string filePath)
     {
-        var entries = await LoadEntriesAsync();
+        var entries = await LoadEntriesAsync(key);
 
         entries.RemoveAll(e => e.FileName.Equals(fileName, StringComparison.OrdinalIgnoreCase)
                              && e.FilePath.Equals(filePath, StringComparison.OrdinalIgnoreCase));
 
         entries.Insert(0, (fileName, filePath));
 
-        await SaveEntriesAsync(entries);
+        await SaveEntriesAsync(key, entries);
     }
 
-    public static async Task<List<(string FileName, string FilePath)>> LoadEntriesAsync()
+    public static async Task<List<(string FileName, string FilePath)>> LoadEntriesAsync(string key)
     {
-        string path = GetHistoryFilePath();
+        string path = GetHistoryFilePath(key);
         if (!File.Exists(path))
             return new List<(string, string)>();
 
         var lines = await File.ReadAllLinesAsync(path);
-
         var entries = new List<(string, string)>();
+
         foreach (var line in lines)
         {
             var parts = line.Split(new[] { " - " }, 2, StringSplitOptions.None);
@@ -48,21 +49,20 @@ public static class FileHistoryService
         return entries;
     }
 
-    public static async Task SaveEntriesAsync(List<(string FileName, string FilePath)> entries)
+    private static async Task SaveEntriesAsync(string key, List<(string FileName, string FilePath)> entries)
     {
-        string path = GetHistoryFilePath();
-
-        var lines = entries.Select(e => $"{e.FileName} - {e.FilePath}").ToList();
-
+        string path = GetHistoryFilePath(key);
+        var lines = entries.Select(e => $"{e.FileName} - {e.FilePath}");
         await File.WriteAllLinesAsync(path, lines);
     }
 
     public static async Task ClearHistoryAsync()
     {
-        string path = GetHistoryFilePath();
-        if (File.Exists(path))
-            File.Delete(path);
-
+        if (Directory.Exists(HistoryDirectory))
+        {
+            foreach (var file in Directory.GetFiles(HistoryDirectory))
+                File.Delete(file);
+        }
         await Task.CompletedTask;
     }
 }

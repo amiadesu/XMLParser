@@ -4,7 +4,8 @@ public static class Literals
 {
     public const string errorMessage = "#ERROR";
     public const string refErrorMessage = "#REF";
-    public const string defaultFileName = "result.xml";
+    public const string defaultXmlFileName = "result.xml";
+    public const string defaultXslFileName = "converter.xsl";
     public const string defaultHistoryFileName = "file_history.txt";
     public static readonly string[] supportedExtensions = { ".xml", ".xsl" };
 
