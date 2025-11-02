@@ -39,13 +39,6 @@
                     IsVisible="False"
                     Clicked="OnLogoutClicked" />
 
-            <Button Text="Допомога"
-                    BackgroundColor="{AppThemeBinding Light=#E5E5EA, Dark=#3A3A3C}"
-                    TextColor="{AppThemeBinding Light=#000000, Dark=#FFFFFF}"
-                    CornerRadius="10"
-                    HeightRequest="45"
-                    Clicked="OnHelpClicked" />
-
             <ActivityIndicator x:Name="LoadingIndicator"
                                IsVisible="False"
                                IsRunning="False"

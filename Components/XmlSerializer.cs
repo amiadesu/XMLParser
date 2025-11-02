@@ -1,6 +1,9 @@
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Xml;
+using XMLParser.Components.Logging;
 using XMLParser.Models;
 
 namespace XMLParser.Services.Serialization
@@ -9,6 +12,21 @@ namespace XMLParser.Services.Serialization
     {
         public static string Serialize(IList<StudentModel> students)
         {
+            try
+            {
+                string result = SerializeInternal(students);
+                Logger.Instance.Info($"Успішна серіалізація {students.Count} студентів у XML:\n{result[..100]}");
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Logger.Instance.Warn("Помилка при серіалізації студентів у XML", ex);
+                return string.Empty;
+            }
+        }
+
+        private static string SerializeInternal(IList<StudentModel> students)
+        {
             var settings = new XmlWriterSettings
             {
                 Indent = true,
@@ -16,9 +34,10 @@ namespace XMLParser.Services.Serialization
                 OmitXmlDeclaration = false,
                 NewLineChars = "\n"
             };
+            settings.Encoding = new UTF8Encoding(false);
 
-            var sb = new StringBuilder();
-            using (var w = XmlWriter.Create(sb, settings))
+            var ms = new MemoryStream();
+            using (var w = XmlWriter.Create(ms, settings))
             {
                 w.WriteStartDocument();
                 w.WriteStartElement("students");
@@ -33,7 +52,7 @@ namespace XMLParser.Services.Serialization
                 w.Flush();
             }
 
-            return sb.ToString();
+            return Encoding.UTF8.GetString(ms.ToArray());
         }
 
         private static void WriteStudent(XmlWriter w, StudentModel student)

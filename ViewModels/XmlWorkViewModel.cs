@@ -151,7 +151,7 @@ namespace XMLParser.Views
 
         private async Task InitializeAsync()
         {
-            _xmlBytes = Encoding.Unicode.GetBytes(_xmlData);
+            _xmlBytes = Encoding.UTF8.GetBytes(_xmlData);
             OriginalXml = _xmlData;
             FilteredXml = OriginalXml;
 
@@ -289,8 +289,10 @@ namespace XMLParser.Views
         {
             try
             {
-                using var reader = new StringReader(FilteredXml);
+                var xmlBytes = Encoding.UTF8.GetBytes(FilteredXml);
+                using var reader = new MemoryStream(xmlBytes);
                 var xmlDoc = new XPathDocument(reader);
+
                 var transform = new XslCompiledTransform();
                 using (var xsltReader = XmlReader.Create(new StringReader(_xslData)))
                 {

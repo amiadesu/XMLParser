@@ -35,13 +35,6 @@ namespace XMLParser.Views
             SetLoading(false);
         }
 
-        private async void OnHelpClicked(object sender, EventArgs e)
-        {
-            SetLoading(true);
-            await Shell.Current.Navigation.PushAsync(new HelpPage());
-            SetLoading(false);
-        }
-
         private async void OnSaveXmlClicked(object sender, EventArgs e)
         {
             if (BindingContext is not XmlWorkViewModel vm) return;

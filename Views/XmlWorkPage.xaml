@@ -12,27 +12,10 @@
 
         <!-- 🔝 Верхняя панель -->
         <Grid Grid.Row="0" Grid.ColumnSpan="3"
-            ColumnDefinitions="Auto,*,Auto,Auto,Auto,Auto"
+            ColumnDefinitions="*,Auto,Auto,Auto,Auto,Auto"
             Padding="10,0,10,0">
 
-            <HorizontalStackLayout Grid.Column="0" Spacing="10">
-                <Button Text="← Назад"
-                        Clicked="OnHomeClicked"
-                        BackgroundColor="#7C3AED"
-                        TextColor="White"
-                        CornerRadius="8"
-                        HeightRequest="36"
-                        Padding="15,0" />
-                <Button Text="?"
-                        Clicked="OnHelpClicked"
-                        BackgroundColor="#7C3AED"
-                        TextColor="White"
-                        CornerRadius="8"
-                        HeightRequest="36"
-                        Padding="12,0" />
-            </HorizontalStackLayout>
-
-            <Label Grid.Column="1"
+            <Label Grid.Column="0"
                 Text="Робота з XML"
                 FontAttributes="Bold"
                 FontSize="20"
@@ -40,9 +23,18 @@
                 VerticalOptions="Center" />
 
             <!-- Белые кнопки справа (увеличенные и с нормальными подписями) -->
-            <HorizontalStackLayout Grid.Column="2" Grid.ColumnSpan="4"
+            <HorizontalStackLayout Grid.Column="1" Grid.ColumnSpan="5"
                                 HorizontalOptions="End"
                                 Spacing="10">
+                <Button Text="На головну"
+                        BackgroundColor="White"
+                        TextColor="#7C3AED"
+                        CornerRadius="8"
+                        FontSize="13"
+                        HeightRequest="36"
+                        MinimumWidthRequest="130"
+                        Padding="12,0"
+                        Clicked="OnHomeClicked" />
                 <Button Text="Зберегти як XML"
                         BackgroundColor="White"
                         TextColor="#7C3AED"
@@ -61,7 +53,7 @@
                         MinimumWidthRequest="130"
                         Padding="12,0"
                         Clicked="OnSaveHtmlClicked" />
-                <Button Text="Зберегти XML у Drive"
+                <Button Text="Зберегти XML на Drive"
                         BackgroundColor="White"
                         TextColor="#7C3AED"
                         CornerRadius="8"
@@ -70,7 +62,7 @@
                         MinimumWidthRequest="150"
                         Padding="12,0"
                         Clicked="OnSaveXmlDriveClicked" />
-                <Button Text="Зберегти HTML у Drive"
+                <Button Text="Зберегти HTML на Drive"
                         BackgroundColor="White"
                         TextColor="#7C3AED"
                         CornerRadius="8"

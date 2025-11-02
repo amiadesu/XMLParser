@@ -95,11 +95,6 @@ namespace XMLParser.Views
             SetLoading(false);
         }
 
-        private async void OnHelpClicked(object sender, EventArgs e)
-        {
-            await Shell.Current.Navigation.PushAsync(new HelpPage());
-        }
-
         private void UpdateTabsUi()
         {
             AuthorizeButton.IsVisible = !_driveAuthorized;

@@ -25,20 +25,20 @@
                 <Button Text="{x:Static locales:AppResources.HomePage}"
                         Clicked="OnHomePageClicked"
                         Margin="5,10"
-                        BackgroundColor="#217346"
+                        BackgroundColor="#7C3AED"
                         TextColor="White"/>
 
                 <Button Text="{x:Static locales:AppResources.Return}"
                         Clicked="OnReturnClicked"
                         Margin="5,10"
-                        BackgroundColor="#217346"
+                        BackgroundColor="#7C3AED"
                         TextColor="White"/>
 
                 <Button Text="{x:Static locales:AppResources.SignIn}"
                     x:Name="SignInButton"
                     Clicked="OnSignInClicked"
                     Margin="5,10"
-                    BackgroundColor="#217346"
+                    BackgroundColor="#7C3AED"
                     TextColor="White"/>
 
                 <Grid ColumnDefinitions="Auto,*"
@@ -60,7 +60,7 @@
                     x:Name="SaveButton"
                     Clicked="OnSaveClicked"
                     Margin="5,10"
-                    BackgroundColor="#217346"
+                    BackgroundColor="#7C3AED"
                     TextColor="White"
                     IsVisible="False" />
             </VerticalStackLayout>

@@ -39,9 +39,9 @@ public partial class GoogleDriveSavePage : ContentPage
 
     public GoogleDriveSavePage(string fileData, string fileName, string extension = ".xml")
     {
+        _extension = extension;
         _fileData = fileData;
         _fileName = fileName;
-        _extension = extension;
 
         InitializeComponent();
     }
@@ -85,7 +85,8 @@ public partial class GoogleDriveSavePage : ContentPage
     private async void OnReturnClicked(object sender, EventArgs e)
     {
         SetLoading(true);
-        await Shell.Current.Navigation.PushAsync(new XmlWorkPage(_fileData, _fullFileName));
+        Logger.Instance.Info($"Повернення до сторінки редагування файлу {_fileData} з іменем {_fullFileName}");
+        await Shell.Current.Navigation.PushAsync(new XmlWorkPage(_fileData, "", _fullFileName));
         SetLoading(false);
     }
 
