@@ -259,7 +259,10 @@ namespace XMLParser.Views
             var existing = ActiveFilters.FirstOrDefault(f => f.Key == SelectedAttrKey);
             if (existing != null) ActiveFilters.Remove(existing);
 
-            ActiveFilters.Add(new FilterItem(SelectedAttrKey, NewAttrValue));
+            ActiveFilters.Add(new FilterItem(SelectedAttrKey, NewAttrValue)
+            {
+                RemoveFilterCommand = new Command(() => RemoveFilter(SelectedAttrKey))
+            });
             _ = SearchAsync();
         }
 
@@ -328,5 +331,6 @@ namespace XMLParser.Views
     public record FilterItem(string Key, string Value)
     {
         public string Display => $"{Key} = {Value}";
+        public ICommand? RemoveFilterCommand { get; set; }
     }
 }

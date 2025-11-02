@@ -124,18 +124,13 @@
                     <Label Text="Результати"
                            FontAttributes="Bold"
                            FontSize="16" />
-                    <CollectionView x:DataType="viewmodels:XmlWorkViewModel" 
-                                    ItemsSource="{Binding ResultLines}" 
-                                    IsVisible="{Binding IsResultsVisible}">
+                    <CollectionView x:DataType="viewmodels:XmlWorkViewModel" ItemsSource="{Binding ResultLines}" IsVisible="{Binding IsResultsVisible}">
                         <CollectionView.ItemTemplate>
-                            <DataTemplate>
+                            <DataTemplate x:DataType="x:String">
                                 <Border BackgroundColor="{AppThemeBinding Light=#F2F2F7, Dark=#3A3A3C}"
                                        Padding="10"
                                        Margin="0,4,0,0">
-                                    <Label x:DataType="viewmodels:XmlWorkViewModel" 
-                                            Text="{Binding .}" 
-                                            FontSize="13" 
-                                            LineBreakMode="WordWrap" />
+                                    <Label Text="{Binding .}" FontSize="13" LineBreakMode="WordWrap" />
                                 </Border>
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
@@ -168,19 +163,17 @@
                                     <Border BackgroundColor="#E6DEFF"
                                            Padding="6"
                                            Margin="0,3,0,0">
-                                        <HorizontalStackLayout VerticalOptions="Center">
-                                            <Label x:DataType="viewmodels:FilterItem"
-                                                   Text="{Binding Display}"
+                                        <HorizontalStackLayout x:DataType="viewmodels:FilterItem" VerticalOptions="Center">
+                                            <Label Text="{Binding Display}"
                                                    VerticalOptions="Center"
                                                    FontSize="13"
                                                    LineBreakMode="TailTruncation" />
-                                            <Button x:DataType="viewmodels:FilterItem"
-                                                    Text="✕"
+                                            <Button Text="✕"
                                                     FontSize="12"
                                                     BackgroundColor="Transparent"
                                                     TextColor="Red"
                                                     Padding="5,0"
-                                                    Command="{Binding BindingContext.RemoveFilterCommand, Source={x:Reference RootPage}}"
+                                                    Command="{Binding RemoveFilterCommand}"
                                                     CommandParameter="{Binding Key}"
                                                     HorizontalOptions="End"
                                                     VerticalOptions="Center" />
