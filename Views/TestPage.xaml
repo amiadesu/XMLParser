@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="XMLParser.Views.TestPage"
+             x:Name="RootPage"
+             Title="XML Parser - Quick Test">
+
+  <!-- Макет: слева функционал, справа — список активных фильтров -->
+  <Grid Padding="12" ColumnSpacing="16" RowSpacing="10">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="*"/>
+    </Grid.RowDefinitions>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="3*"/>
+      <ColumnDefinition Width="*"/>
+    </Grid.ColumnDefinitions>
+
+    <!-- Заголовок + keyword + кнопки -->
+    <VerticalStackLayout Grid.Row="0" Grid.Column="0" Spacing="8">
+      <Label Text="XML Parser (quick test)" FontAttributes="Bold" />
+      <Entry Placeholder="Keyword" Text="{Binding Keyword}" />
+      <HorizontalStackLayout Spacing="8">
+        <Button Text="Load Sample XML" Command="{Binding LoadSampleCommand}" />
+        <Button Text="Search" Command="{Binding SearchCommand}" />
+        <Button Text="Clear" Command="{Binding ClearCommand}" />
+      </HorizontalStackLayout>
+    </VerticalStackLayout>
+
+    <!-- Добавление фильтра -->
+    <Frame Grid.Row="1" Grid.Column="0" Padding="8" HasShadow="False" BorderColor="LightGray">
+      <Grid ColumnDefinitions="150,*,Auto" ColumnSpacing="8">
+        <Picker Grid.Column="0"
+                Title="Attribute"
+                ItemsSource="{Binding AttrKeys}"
+                SelectedItem="{Binding SelectedAttrKey}" />
+        <Entry Grid.Column="1"
+               Placeholder="Value"
+               Text="{Binding NewAttrValue}" />
+        <Button Grid.Column="2"
+                Text="Add"
+                Command="{Binding AddFilterCommand}" />
+      </Grid>
+    </Frame>
+
+    <!-- Результаты -->
+    <VerticalStackLayout Grid.Row="2" Grid.Column="0">
+      <Label Text="Results:"/>
+    </VerticalStackLayout>
+
+    <CollectionView Grid.Row="3" Grid.Column="0" ItemsSource="{Binding ResultLines}">
+      <CollectionView.ItemTemplate>
+        <DataTemplate>
+          <Frame Padding="8" Margin="4" BorderColor="LightGray" HasShadow="False">
+            <Label Text="{Binding .}" LineBreakMode="WordWrap"/>
+          </Frame>
+        </DataTemplate>
+      </CollectionView.ItemTemplate>
+    </CollectionView>
+
+    <!-- Правая панель: активные фильтры -->
+    <VerticalStackLayout Grid.Row="0" Grid.RowSpan="4" Grid.Column="1" Spacing="8">
+      <Label Text="Active filters" FontAttributes="Bold"/>
+      <CollectionView ItemsSource="{Binding ActiveFilters}">
+        <CollectionView.ItemTemplate>
+          <DataTemplate>
+            <Grid ColumnDefinitions="*,Auto" Padding="4">
+              <Label Grid.Column="0" Text="{Binding Display}" LineBreakMode="TailTruncation"/>
+              <Button Grid.Column="1"
+                      Text="✕"
+                      Command="{Binding Source={x:Reference RootPage}, Path=BindingContext.RemoveFilterCommand}"
+                      CommandParameter="{Binding Key}" />
+            </Grid>
+          </DataTemplate>
+        </CollectionView.ItemTemplate>
+      </CollectionView>
+    </VerticalStackLayout>
+
+  </Grid>
+</ContentPage>
