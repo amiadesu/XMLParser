@@ -122,7 +122,7 @@
                     <Label Text="Результати"
                            FontAttributes="Bold"
                            FontSize="16" />
-                    <CollectionView ItemsSource="{Binding ResultLines}">
+                    <CollectionView ItemsSource="{Binding ResultLines}" IsVisible="{Binding IsResultsVisible}">
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
                                 <Border BackgroundColor="{AppThemeBinding Light=#F2F2F7, Dark=#3A3A3C}"
@@ -133,6 +133,11 @@
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
                     </CollectionView>
+                    <Label Text="{Binding VisualText}"
+                           FontSize="14"
+                           TextColor="{AppThemeBinding Light=#000000, Dark=#FFFFFF}"
+                           HorizontalOptions="Center"
+                           IsVisible="{Binding IsVisualTextVisible}" />
                 </VerticalStackLayout>
 
             </VerticalStackLayout>

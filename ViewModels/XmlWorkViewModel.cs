@@ -35,6 +35,8 @@ namespace XMLParser.Views
         public string OriginalXml { get; private set; } = string.Empty;
         public string FilteredXml { get; private set; } = string.Empty;
         public string VisualText { get; private set; } = string.Empty;
+        public bool IsVisualTextVisible => !string.IsNullOrEmpty(VisualText) && ResultLines.Count == 0;
+        public bool IsResultsVisible => ResultLines.Count > 0;
         private byte[] _xmlBytes = Array.Empty<byte>();
 
         public ObservableCollection<string> ResultLines { get; } = new();
@@ -181,20 +183,26 @@ namespace XMLParser.Views
         {
             if (_xmlBytes.Length == 0) return;
 
-            var logMessageBuilder = new StringBuilder();
-            logMessageBuilder.Append($"Фільтр за ключовим словом '{Keyword}' та {SelectedAttrFilters.Count} атрибутами:");
-            foreach (var kv in SelectedAttrFilters)
-            {
-                logMessageBuilder.Append($"\n @{kv.Key}='{kv.Value}'");
-            }
-
-            Logger.Instance.Info(logMessageBuilder.ToString());
-
-
-            ResultLines.Clear();
+            LogFilters();
 
             using var ms = new MemoryStream(_xmlBytes);
             var items = await _strategy.SearchAsync(ms, Keyword, SelectedAttrFilters);
+
+            UpdateVisuals(items);
+
+            UpdateFilteredXml(items);
+        }
+
+        private void UpdateVisuals(IList<StudentModel>? items)
+        {
+            ResultLines.Clear();
+
+            if (items == null || items.Count == 0)
+            {
+                VisualText = "Немає результатів.";
+                FireVisualUpdates();
+                return;
+            }
 
             var sb = new StringBuilder();
             foreach (var item in items)
@@ -205,32 +213,26 @@ namespace XMLParser.Views
             }
             VisualText = sb.ToString().TrimEnd();
 
-            var students = items.Select(x =>
+            FireVisualUpdates();
+        }
+
+        private void FireVisualUpdates()
+        {
+            OnPropertyChanged(nameof(VisualText));
+            OnPropertyChanged(nameof(IsVisualTextVisible));
+            OnPropertyChanged(nameof(IsResultsVisible));
+        }
+
+        private void UpdateFilteredXml(IList<StudentModel>? items)
+        {
+            if (items == null || items.Count == 0)
             {
-                var dict = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-                if (x.Attributes is IDictionary<string, HashSet<string>> hdict)
-                {
-                    foreach (var kv in hdict)
-                        dict[kv.Key] = string.Join(", ", kv.Value);
-                }
-                else if (x.Attributes is IDictionary<string, string> sdict)
-                {
-                    foreach (var kv in sdict)
-                        dict[kv.Key] = kv.Value;
-                }
+                FilteredXml = "<students/>";
+                OnPropertyChanged(nameof(FilteredXml));
+                return;
+            }
 
-                return new StudentModel(
-                    FullName: x.FullName,
-                    Faculty: x.Faculty,
-                    Department: x.Department,
-                    Specialty: x.Specialty,
-                    EventWindow: x.EventWindow,
-                    ParliamentType: x.ParliamentType,
-                    Attributes: dict
-                );
-            }).ToList();
-
-            var built = StudentXmlSerializer.Serialize(students);
+            var built = StudentXmlSerializer.Serialize(items);
             FilteredXml = string.IsNullOrWhiteSpace(built) ? "<students/>" : built.Trim();
 
             OnPropertyChanged(nameof(FilteredXml));
@@ -308,6 +310,18 @@ namespace XMLParser.Views
                 Logger.Instance.Warn("Помилка при створенні .html документа", ex);
                 return $"<!-- Transformation error: {ex.Message} -->";
             }
+        }
+
+        private void LogFilters()
+        {
+            var logMessageBuilder = new StringBuilder();
+            logMessageBuilder.Append($"Фільтр за ключовим словом '{Keyword}' та {SelectedAttrFilters.Count} атрибутами:");
+            foreach (var kv in SelectedAttrFilters)
+            {
+                logMessageBuilder.Append($"\n @{kv.Key}='{kv.Value}'");
+            }
+
+            Logger.Instance.Info(logMessageBuilder.ToString());
         }
     }
 
