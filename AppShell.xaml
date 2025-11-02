@@ -10,8 +10,8 @@
 
     <ShellContent
         Title="XMLParser"
-        ContentTemplate="{DataTemplate views:TestPage}"
-        Route="TestPage" 
+        ContentTemplate="{DataTemplate views:StartingPage}"
+        Route="StartingPage" 
         />
 
 </Shell>

@@ -5,11 +5,6 @@ namespace XMLParser.Utils;
 
 public static class DataProcessor
 {
-    public static double StringToDouble(string number)
-    {
-        return double.Parse(number, CultureInfo.InvariantCulture);
-    }
-
     public static string FormatResource(string resource, params (string key, object value)[] parameters)
     {
         string result = resource;

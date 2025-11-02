@@ -1,0 +1,222 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:XMLParser.Views"
+             x:Class="XMLParser.Views.XmlWorkPage"
+             x:Name="RootPage"
+             BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1C1C1E}"
+             Padding="20">
+
+    <Grid RowDefinitions="Auto,*"
+          ColumnDefinitions="2*,5*,3*"
+          ColumnSpacing="25"
+          RowSpacing="20">
+
+        <Grid Grid.Row="0" Grid.ColumnSpan="3"
+            ColumnDefinitions="*,Auto,Auto,Auto,Auto,Auto"
+            Padding="10,0,10,0">
+
+            <Label Grid.Column="0"
+                Text="Робота з XML"
+                FontAttributes="Bold"
+                FontSize="20"
+                HorizontalOptions="Center"
+                VerticalOptions="Center" />
+
+            <HorizontalStackLayout Grid.Column="1" Grid.ColumnSpan="5"
+                                HorizontalOptions="End"
+                                Spacing="10">
+                <Button Text="На головну"
+                        BackgroundColor="White"
+                        TextColor="#7C3AED"
+                        CornerRadius="8"
+                        FontSize="13"
+                        HeightRequest="36"
+                        MinimumWidthRequest="130"
+                        Padding="12,0"
+                        Clicked="OnHomeClicked" />
+                <Button Text="Зберегти як XML"
+                        BackgroundColor="White"
+                        TextColor="#7C3AED"
+                        CornerRadius="8"
+                        FontSize="13"
+                        HeightRequest="36"
+                        MinimumWidthRequest="130"
+                        Padding="12,0"
+                        Clicked="OnSaveXmlClicked" />
+                <Button Text="Зберегти як HTML"
+                        BackgroundColor="White"
+                        TextColor="#7C3AED"
+                        CornerRadius="8"
+                        FontSize="13"
+                        HeightRequest="36"
+                        MinimumWidthRequest="130"
+                        Padding="12,0"
+                        Clicked="OnSaveHtmlClicked" />
+                <Button Text="Зберегти XML на Drive"
+                        BackgroundColor="White"
+                        TextColor="#7C3AED"
+                        CornerRadius="8"
+                        FontSize="13"
+                        HeightRequest="36"
+                        MinimumWidthRequest="150"
+                        Padding="12,0"
+                        Clicked="OnSaveXmlDriveClicked" />
+                <Button Text="Зберегти HTML на Drive"
+                        BackgroundColor="White"
+                        TextColor="#7C3AED"
+                        CornerRadius="8"
+                        FontSize="13"
+                        HeightRequest="36"
+                        MinimumWidthRequest="160"
+                        Padding="12,0"
+                        Clicked="OnSaveHtmlDriveClicked" />
+            </HorizontalStackLayout>
+        </Grid>
+
+        <ScrollView Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
+            <VerticalStackLayout Spacing="20">
+
+                <Border BackgroundColor="{AppThemeBinding Light=#F5F3FA, Dark=#2C2C2E}"
+                       Padding="20">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Пошук" FontAttributes="Bold" FontSize="16" />
+
+                        <Entry x:DataType="viewmodels:XmlWorkViewModel" Placeholder="Ключове слово" Text="{Binding Keyword}" />
+                        <Label Text="Оберіть атрибут"
+                            FontSize="14"
+                            FontAttributes="Bold"
+                            TextColor="{AppThemeBinding Light=#000000, Dark=#FFFFFF}"
+                            Margin="0,0,0,5" />
+                        <Grid ColumnDefinitions="160,*" HeightRequest="44" HorizontalOptions="FillAndExpand">
+                            <Picker x:DataType="viewmodels:XmlWorkViewModel"
+                                Grid.Column="0"
+                                ItemsSource="{Binding AttrKeys}"
+                                SelectedItem="{Binding SelectedAttrKey}"
+                                BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#2C2C2E}"
+                                TextColor="{AppThemeBinding Light=#000000, Dark=#FFFFFF}"
+                                VerticalOptions="Center"
+                                HorizontalOptions="Fill"
+                                Margin="0" />
+
+                            <Entry x:DataType="viewmodels:XmlWorkViewModel"
+                                Grid.Column="1"
+                                Placeholder="Значення"
+                                Text="{Binding NewAttrValue}"
+                                BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#2C2C2E}"
+                                TextColor="{AppThemeBinding Light=#000000, Dark=#FFFFFF}"
+                                VerticalOptions="Center"
+                                HorizontalOptions="FillAndExpand"
+                                Margin="10,0,0,0"
+                                HeightRequest="44" />
+                        </Grid>
+
+                        <Button x:DataType="viewmodels:XmlWorkViewModel"
+                                Text="Додати фільтр"
+                                BackgroundColor="#7C3AED"
+                                TextColor="White"
+                                CornerRadius="10"
+                                HeightRequest="45"
+                                Command="{Binding AddFilterCommand}" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Результати"
+                           FontAttributes="Bold"
+                           FontSize="16" />
+                    <CollectionView x:DataType="viewmodels:XmlWorkViewModel" ItemsSource="{Binding ResultLines}" IsVisible="{Binding IsResultsVisible}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="x:String">
+                                <Border BackgroundColor="{AppThemeBinding Light=#F2F2F7, Dark=#3A3A3C}"
+                                       Padding="10"
+                                       Margin="0,4,0,0">
+                                    <Label Text="{Binding .}" FontSize="13" LineBreakMode="WordWrap" />
+                                </Border>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                    <Label x:DataType="viewmodels:XmlWorkViewModel"
+                           Text="{Binding VisualText}"
+                           FontSize="14"
+                           TextColor="{AppThemeBinding Light=#000000, Dark=#FFFFFF}"
+                           HorizontalOptions="Center"
+                           IsVisible="{Binding IsVisualTextVisible}" />
+                </VerticalStackLayout>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <ScrollView Grid.Row="1" Grid.Column="2">
+            <VerticalStackLayout Spacing="15">
+
+                <Border BackgroundColor="{AppThemeBinding Light=#F5F3FA, Dark=#2C2C2E}"
+                       Padding="20">
+                    <VerticalStackLayout Spacing="10">
+
+                        <Label Text="Активні фільтри"
+                               FontAttributes="Bold"
+                               FontSize="16" />
+
+                        <CollectionView x:DataType="viewmodels:XmlWorkViewModel" ItemsSource="{Binding ActiveFilters}">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Border BackgroundColor="#E6DEFF"
+                                           Padding="6"
+                                           Margin="0,3,0,0">
+                                        <HorizontalStackLayout x:DataType="viewmodels:FilterItem" VerticalOptions="Center">
+                                            <Label Text="{Binding Display}"
+                                                   VerticalOptions="Center"
+                                                   FontSize="13"
+                                                   LineBreakMode="TailTruncation" />
+                                            <Button Text="✕"
+                                                    FontSize="12"
+                                                    BackgroundColor="Transparent"
+                                                    TextColor="Red"
+                                                    Padding="5,0"
+                                                    Command="{Binding RemoveFilterCommand}"
+                                                    CommandParameter="{Binding Key}"
+                                                    HorizontalOptions="End"
+                                                    VerticalOptions="Center" />
+                                        </HorizontalStackLayout>
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+
+                        <Button x:DataType="viewmodels:XmlWorkViewModel"
+                                Text="Очистити фільтри"
+                                BackgroundColor="{AppThemeBinding Light=#E5E5EA, Dark=#3A3A3C}"
+                                TextColor="{AppThemeBinding Light=#000000, Dark=#FFFFFF}"
+                                CornerRadius="10"
+                                HeightRequest="40"
+                                Command="{Binding ClearCommand}" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border BackgroundColor="{AppThemeBinding Light=#F5F3FA, Dark=#2C2C2E}"
+                       Padding="20">
+                    <VerticalStackLayout>
+                        <Label Text="Алгоритм пошуку"
+                               FontAttributes="Bold"
+                               FontSize="16" />
+                        <Picker x:DataType="viewmodels:XmlWorkViewModel"
+                                Title="Обрати стратегію"
+                                ItemsSource="{Binding Strategies}"
+                                SelectedItem="{Binding SelectedStrategy}" />
+                    </VerticalStackLayout>
+                </Border>
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <ActivityIndicator x:Name="LoadingIndicator"
+                           Grid.RowSpan="2"
+                           Grid.ColumnSpan="3"
+                           IsVisible="False"
+                           IsRunning="False"
+                           Color="#7C3AED"
+                           WidthRequest="48"
+                           HeightRequest="48"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center" />
+    </Grid>
+</ContentPage>

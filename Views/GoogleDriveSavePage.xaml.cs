@@ -3,9 +3,9 @@ using System;
 using XMLParser.FileSystem;
 using XMLParser.Utils;
 using XMLParser.Resources.Localization;
-using XMLParser.Services;
 using XMLParser.Services.GoogleDrive;
 using System.Threading.Tasks;
+using XMLParser.Components.Logging;
 
 namespace XMLParser.Views;
 
@@ -16,27 +16,29 @@ public partial class GoogleDriveSavePage : ContentPage
     private bool _initialized = false;
     private bool _authorized => _googleDriveService.IsSignedIn;
 
-    private string _fileData = "";
+    private readonly string _extension;
+    private readonly string _fileData;
     private string _fullFileName = "";
     private string _fileName
     {
         get
         {
-            if (_fullFileName.EndsWith(".table"))
-                return _fullFileName.Substring(0, _fullFileName.Length - 6); // 6 = length of ".table"
+            if (_fullFileName.EndsWith(_extension))
+                return _fullFileName.Substring(0, _fullFileName.Length - _extension.Length);
             return _fullFileName;
         }
         set
         {
-            if (!value.EndsWith(".table"))
-                _fullFileName = value + ".table";
+            if (!value.EndsWith(_extension))
+                _fullFileName = value + _extension;
             else
                 _fullFileName = value;
         }
     }
 
-    public GoogleDriveSavePage(string fileData, string fileName)
+    public GoogleDriveSavePage(string fileData, string fileName, string extension = ".xml")
     {
+        _extension = extension;
         _fileData = fileData;
         _fileName = fileName;
 
@@ -82,7 +84,8 @@ public partial class GoogleDriveSavePage : ContentPage
     private async void OnReturnClicked(object sender, EventArgs e)
     {
         SetLoading(true);
-        await Shell.Current.Navigation.PushAsync(new SpreadsheetPage(_fileData, _fullFileName));
+        Logger.Instance.Info($"Повернення до сторінки редагування файлу {_fileData} з іменем {_fullFileName}");
+        await Shell.Current.Navigation.PushAsync(new XmlWorkPage(_fileData, "", _fullFileName));
         SetLoading(false);
     }
 
@@ -99,6 +102,8 @@ public partial class GoogleDriveSavePage : ContentPage
         _fileName = FileNameEntry.Text;
         var result = await _tableFileService.SaveToGoogleDrive(_fileData, _googleDriveService, _fullFileName);
         SetLoading(false);
+        
+        Logger.Instance.Info($"Спроба зберегти файл {_fileName} на Google Drive з результатом {result}");
 
         await DisplayAlert(
             DataProcessor.FormatResource(

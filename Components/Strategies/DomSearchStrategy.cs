@@ -11,31 +11,28 @@ namespace XMLParser.Strategies;
 
 public sealed class DomSearchStrategy : IXmlSearchStrategy
 {
-    public Task<IList<StudentModel>> SearchAsync(Stream xmlStream, string keyword,
+    public async Task<IList<StudentModel>> SearchAsync(Stream xmlStream, string keyword,
         IReadOnlyDictionary<string, string> attributeFilters, CancellationToken ct = default)
     {
+        if (xmlStream.CanSeek)
+        {
+            xmlStream.Seek(0, SeekOrigin.Begin);
+        }
+
         var list = new List<StudentModel>();
         var doc = new XmlDocument();
         doc.Load(xmlStream);
         foreach (XmlElement student in doc.GetElementsByTagName("student"))
         {
             if (!Match(student, attributeFilters)) continue;
-            string text = string.Join(" ", student.ChildNodes.Cast<XmlNode>().Select(n => n.InnerText));
-            if (string.IsNullOrWhiteSpace(keyword) || text.Contains(keyword, StringComparison.OrdinalIgnoreCase))
+
+            var sm = await ReadStudent(student, keyword, ct);
+            if (sm != null)
             {
-                var attrs = student.Attributes.Cast<XmlAttribute>().ToDictionary(a => a.Name, a => a.Value);
-                list.Add(new StudentModel(
-                    student["fullname"]?.InnerText ?? "",
-                    student["faculty"]?.InnerText ?? "",
-                    student["department"]?.InnerText ?? "",
-                    student["specialty"]?.InnerText ?? "",
-                    student["eventWindow"]?.InnerText ?? "",
-                    student["parliamentType"]?.InnerText ?? "",
-                    attrs
-                ));
+                list.Add(sm);
             }
         }
-        return Task.FromResult<IList<StudentModel>>(list);
+        return list;
     }
 
     public Task<Dictionary<string, HashSet<string>>> InspectAttributesAsync(Stream xmlStream, CancellationToken ct = default)
@@ -52,6 +49,26 @@ public sealed class DomSearchStrategy : IXmlSearchStrategy
             }
         }
         return Task.FromResult(dict);
+    }
+    
+    private Task<StudentModel?> ReadStudent(XmlElement student, string keyword, CancellationToken ct = default)
+    {
+        string text = string.Join(" ", student.ChildNodes.Cast<XmlNode>().Select(n => n.InnerText));
+        if (!string.IsNullOrWhiteSpace(keyword) && !text.Contains(keyword, StringComparison.OrdinalIgnoreCase))
+        {
+            return Task.FromResult<StudentModel?>(null);
+        }
+        var attrs = student.Attributes.Cast<XmlAttribute>().ToDictionary(a => a.Name, a => a.Value);
+        var sm = new StudentModel(
+            student["fullname"]?.InnerText ?? "",
+            student["faculty"]?.InnerText ?? "",
+            student["department"]?.InnerText ?? "",
+            student["specialty"]?.InnerText ?? "",
+            student["eventWindow"]?.InnerText ?? "",
+            student["parliamentType"]?.InnerText ?? "",
+            attrs
+        );
+        return Task.FromResult<StudentModel?>(sm);
     }
 
     private static bool Match(XmlElement el, IReadOnlyDictionary<string, string> filter)

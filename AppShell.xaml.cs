@@ -10,7 +10,6 @@ public partial class AppShell : Shell
 		InitializeComponent();
 
 		Routing.RegisterRoute(nameof(StartingPage), typeof(StartingPage));
-		Routing.RegisterRoute(nameof(SpreadsheetPage), typeof(SpreadsheetPage));
 	}
 }
 
