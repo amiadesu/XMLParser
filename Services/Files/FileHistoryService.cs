@@ -10,7 +10,7 @@ namespace XMLParser.FileSystem;
 
 public static class FileHistoryService
 {
-    private static readonly string HistoryDirectory = Path.Combine(MauiFileSystem.AppDataDirectory, "history");
+    private static readonly string HistoryDirectory = Path.Combine(MauiFileSystem.AppDataDirectory, Literals.defaultHistoryDirectoryName);
 
     private static string GetHistoryFilePath(string key)
     {

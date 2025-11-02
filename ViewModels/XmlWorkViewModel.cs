@@ -25,8 +25,8 @@ namespace XMLParser.Views
         private readonly string _xslData;
 
         private readonly IXmlSearchStrategy _linq = new LinqSearchStrategy();
-        private readonly IXmlSearchStrategy _dom  = new DomSearchStrategy();
-        private readonly IXmlSearchStrategy _sax  = new SaxSearchStrategy();
+        private readonly IXmlSearchStrategy _dom = new DomSearchStrategy();
+        private readonly IXmlSearchStrategy _sax = new SaxSearchStrategy();
         private IXmlSearchStrategy _strategy;
 
         private const double DebounceSeconds = 0.5;
@@ -108,9 +108,9 @@ namespace XMLParser.Views
 
             _strategy = _linq;
 
-            SearchCommand  = new Command(async () => await SearchAsync());
-            ClearCommand   = new Command(Clear);
-            AddFilterCommand    = new Command(AddFilter);
+            SearchCommand = new Command(async () => await SearchAsync());
+            ClearCommand = new Command(Clear);
+            AddFilterCommand = new Command(AddFilter);
             RemoveFilterCommand = new Command<string>(RemoveFilter);
 
             _ = InitializeAsync();
@@ -187,7 +187,7 @@ namespace XMLParser.Views
             {
                 logMessageBuilder.Append($"\n @{kv.Key}='{kv.Value}'");
             }
-                
+
             Logger.Instance.Info(logMessageBuilder.ToString());
 
 

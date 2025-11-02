@@ -7,7 +7,6 @@ using Microsoft.Maui.Devices;
 using Microsoft.Maui.Storage;
 using CommunityToolkit.Maui.Storage;
 using XMLParser.Resources.Localization;
-using XMLParser.Services;
 using XMLParser.Utils;
 using XMLParser.Services.GoogleDrive;
 using XMLParser.Constants;

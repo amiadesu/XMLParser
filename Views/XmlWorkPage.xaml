@@ -10,7 +10,6 @@
           ColumnSpacing="25"
           RowSpacing="20">
 
-        <!-- 🔝 Верхняя панель -->
         <Grid Grid.Row="0" Grid.ColumnSpan="3"
             ColumnDefinitions="*,Auto,Auto,Auto,Auto,Auto"
             Padding="10,0,10,0">
@@ -22,7 +21,6 @@
                 HorizontalOptions="Center"
                 VerticalOptions="Center" />
 
-            <!-- Белые кнопки справа (увеличенные и с нормальными подписями) -->
             <HorizontalStackLayout Grid.Column="1" Grid.ColumnSpan="5"
                                 HorizontalOptions="End"
                                 Spacing="10">
@@ -74,11 +72,9 @@
             </HorizontalStackLayout>
         </Grid>
 
-        <!-- 🔍 Левая панель: Поиск и результаты -->
         <ScrollView Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
             <VerticalStackLayout Spacing="20">
 
-                <!-- Поиск -->
                 <Border BackgroundColor="{AppThemeBinding Light=#F5F3FA, Dark=#2C2C2E}"
                        Padding="20">
                     <VerticalStackLayout Spacing="10">
@@ -122,7 +118,6 @@
                     </VerticalStackLayout>
                 </Border>
 
-                <!-- Результаты -->
                 <VerticalStackLayout Spacing="10">
                     <Label Text="Результати"
                            FontAttributes="Bold"
@@ -143,7 +138,6 @@
             </VerticalStackLayout>
         </ScrollView>
 
-        <!-- 🎯 Правая колонка: фильтры -->
         <ScrollView Grid.Row="1" Grid.Column="2">
             <VerticalStackLayout Spacing="15">
 

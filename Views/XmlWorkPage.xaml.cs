@@ -1,11 +1,8 @@
 using Microsoft.Maui.Controls;
 using System;
-using System.IO;
-using System.Threading.Tasks;
 using XMLParser.Components.Logging;
 using XMLParser.Constants;
 using XMLParser.FileSystem;
-using XMLParser.Services.GoogleDrive;
 
 namespace XMLParser.Views
 {
