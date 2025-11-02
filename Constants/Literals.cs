@@ -7,6 +7,7 @@ public static class Literals
     public const string defaultXmlFileName = "result.xml";
     public const string defaultXslFileName = "converter.xsl";
     public const string defaultHistoryFileName = "file_history.txt";
+    public const string defaultLogFileName = "logs.txt";
     public static readonly string[] supportedExtensions = { ".xml", ".xsl" };
 
     public const int cellWidth = 100;

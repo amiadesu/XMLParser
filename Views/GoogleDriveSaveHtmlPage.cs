@@ -1,16 +1,11 @@
-using XMLParser.Services.GoogleDrive;
-using XMLParser.FileSystem;
-using XMLParser.Utils;
-using XMLParser.Resources.Localization;
 using System;
-using Microsoft.Maui.Controls;
 
 namespace XMLParser.Views
 {
     public sealed class GoogleDriveSaveHtmlPage : GoogleDriveSavePage
     {
         public GoogleDriveSaveHtmlPage(string fileData, string fileName)
-            : base(fileData, EnsureExtension(fileName))
+            : base(fileData, EnsureExtension(fileName), ".html")
         {
             Title = "Save HTML to Google Drive";
         }

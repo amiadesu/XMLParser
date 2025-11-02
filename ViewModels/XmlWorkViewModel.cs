@@ -14,9 +14,8 @@ using XMLParser.Strategies;
 using XMLParser.Models;
 using XMLParser.Services.Serialization;
 using Microsoft.Maui.ApplicationModel;
-using System.Diagnostics;
-using Microsoft.Maui.Controls.Xaml;
 using System.Xml;
+using XMLParser.Components.Logging;
 
 namespace XMLParser.Views
 {
@@ -138,7 +137,7 @@ namespace XMLParser.Views
                             }
                             catch (Exception ex)
                             {
-                                Debug.WriteLine($"[Debounce] Search failed: {ex.Message}");
+                                Logger.Instance.Error("Не вдалося застосувати пошук за ключовим словом", ex);
                             }
                         });
                     }
@@ -181,6 +180,16 @@ namespace XMLParser.Views
         public async Task SearchAsync()
         {
             if (_xmlBytes.Length == 0) return;
+
+            var logMessageBuilder = new StringBuilder();
+            logMessageBuilder.Append($"Фільтр за ключовим словом '{Keyword}' та {SelectedAttrFilters.Count} атрибутами:");
+            foreach (var kv in SelectedAttrFilters)
+            {
+                logMessageBuilder.Append($"\n @{kv.Key}='{kv.Value}'");
+            }
+                
+            Logger.Instance.Info(logMessageBuilder.ToString());
+
 
             ResultLines.Clear();
 
@@ -294,6 +303,7 @@ namespace XMLParser.Views
             }
             catch (Exception ex)
             {
+                Logger.Instance.Warn("Помилка при створенні .html документа", ex);
                 return $"<!-- Transformation error: {ex.Message} -->";
             }
         }

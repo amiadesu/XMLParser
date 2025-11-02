@@ -2,6 +2,7 @@ using Microsoft.Maui.Controls;
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using XMLParser.Components.Logging;
 using XMLParser.Constants;
 using XMLParser.FileSystem;
 using XMLParser.Services.GoogleDrive;
@@ -49,6 +50,8 @@ namespace XMLParser.Views
             string name = _xmlName;
             string result = await _fileService.SaveLocally(vm.FilteredXml, name);
 
+            Logger.Instance.Info($"Спроба локально зберегти .xml файл {name} з результатом {result}");
+
             await DisplayAlert("Saved", result, "OK");
             SetLoading(false);
         }
@@ -61,6 +64,8 @@ namespace XMLParser.Views
             string html = vm.TransformToHtml();
             string htmlName = _xmlName + ".html";
             string result = await _fileService.SaveLocally(html, htmlName);
+
+            Logger.Instance.Info($"Спроба локально зберегти .html файл {htmlName} з результатом {result}");
 
             await DisplayAlert("Saved", result, "OK");
             SetLoading(false);
