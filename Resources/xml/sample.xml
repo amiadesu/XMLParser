@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<students>
+  <student id="s1" year="3" group="CS-31">
+    <fullname>Іваненко Іван</fullname>
+    <faculty>ФКНК</faculty>
+    <department>Кібернетика</department>
+    <specialty>Комп'ютерні науки</specialty>
+    <eventWindow>2025-03-01..2025-03-07</eventWindow>
+    <parliamentType>Волонтерство</parliamentType>
+  </student>
+  <student id="s2" group="CS-41">
+    <fullname>Петренко Марія</fullname>
+    <faculty>ФКНК</faculty>
+    <department>Інформатика</department>
+    <specialty>Комп'ютерні науки</specialty>
+    <eventWindow>2025-04-12..2025-04-20</eventWindow>
+    <parliamentType>Культурний захід</parliamentType>
+  </student>
+  <student id="s3" year="1" dorm="7">
+    <fullname>Сидоренко Олег</fullname>
+    <faculty>ФІТ</faculty>
+    <department>Програмна інженерія</department>
+    <specialty>Інженерія ПЗ</specialty>
+    <eventWindow>2025-05-10..2025-05-12</eventWindow>
+    <parliamentType>Спорт</parliamentType>
+  </student>
+</students>

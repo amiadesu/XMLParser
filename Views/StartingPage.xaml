@@ -1,0 +1,91 @@
+<ContentPage 
+    x:Class="XMLParser.Views.StartingPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:locales="clr-namespace:XMLParser.Resources.Localization"
+    Title="{x:Static locales:AppResources.ApplicationName}">
+
+    <Grid Padding="20" RowDefinitions="Auto,*">
+        <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Padding="2" HorizontalOptions="Fill">
+            <Label Text="{x:Static locales:AppResources.HomePage}" 
+               FontSize="24" 
+               HorizontalOptions="Center" />
+
+            <ActivityIndicator x:Name="LoadingIndicator"
+                            IsRunning="False"
+                            IsVisible="False"
+                            WidthRequest="30"
+                            HeightRequest="30"
+                            HorizontalOptions="End"
+                            VerticalOptions="Center"/>
+        </Grid>
+
+        <Grid Grid.Row="1" ColumnDefinitions="2*,8*" ColumnSpacing="10">
+            <VerticalStackLayout Grid.Column="0" VerticalOptions="Start">
+                <Button Text="{x:Static locales:AppResources.OpenFile}"
+                        Clicked="OnOpenFilesClicked"
+                        Margin="5,10"
+                        BackgroundColor="#217346"
+                        TextColor="White"/>
+
+                <Button Text="{x:Static locales:AppResources.HelpPage}"
+                        Clicked="OnHelpPageClicked"
+                        Margin="5,10"
+                        BackgroundColor="#217346"
+                        TextColor="White"/>
+
+                <Button Text="{x:Static locales:AppResources.GoogleDrive}"
+                        Clicked="OnViewGoogleDriveFilesClicked"
+                        Margin="5,10"
+                        BackgroundColor="#217346"
+                        TextColor="White"/>
+            </VerticalStackLayout>
+
+            <Grid Grid.Column="1" RowDefinitions="Auto,*" Margin="5,0,5,5">
+                <Button Grid.Row="0"
+                        Text="{x:Static locales:AppResources.CreateNewSpreadsheet}"
+                        Clicked="OnOpenSpreadsheetClicked"
+                        Margin="5,10"
+                        BackgroundColor="#217346"
+                        TextColor="White"/>
+
+                <Grid Grid.Row="1" RowDefinitions="Auto,*" Padding="10">
+                        <VerticalStackLayout Grid.Row="0" Spacing="8" Margin="0,0,0,8">
+                            <HorizontalStackLayout Spacing="10" Padding="2" HorizontalOptions="Center">
+                                <Label Text="{x:Static locales:AppResources.RecentFiles}" 
+                                       FontSize="16" 
+                                       FontAttributes="Bold"
+                                       VerticalOptions="Center"/>
+                                
+                                <Button Text="{x:Static locales:AppResources.Clear}"
+                                        Clicked="OnClearRecentFilesClicked"
+                                        VerticalOptions="Center"
+                                        BackgroundColor="#217346"
+                                        TextColor="White"/>
+                            </HorizontalStackLayout>
+
+                            <BoxView HeightRequest="1" 
+                                     Color="Gray" 
+                                     HorizontalOptions="Fill"/>
+                        </VerticalStackLayout>
+
+                        <Grid Grid.Row="1" RowDefinitions="*">
+                            <ScrollView>
+                                <VerticalStackLayout>
+                                        <Label Text="{x:Static locales:AppResources.NoRecentFiles}"
+                                                x:Name="NoRecentFilesLabel"
+                                                TextColor="Gray" 
+                                                HorizontalOptions="Center"
+                                                IsVisible="True"/>
+
+                                        <VerticalStackLayout x:Name="RecentItemsContainer"
+                                                                Spacing="5"
+                                                                IsVisible="False" />
+                                </VerticalStackLayout>
+                            </ScrollView>
+                        </Grid>
+                </Grid>
+            </Grid>
+        </Grid>
+    </Grid>
+</ContentPage>
