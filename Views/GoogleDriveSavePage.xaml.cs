@@ -82,7 +82,7 @@ public partial class GoogleDriveSavePage : ContentPage
     private async void OnReturnClicked(object sender, EventArgs e)
     {
         SetLoading(true);
-        await Shell.Current.Navigation.PushAsync(new SpreadsheetPage(_fileData, _fullFileName));
+        await Shell.Current.Navigation.PushAsync(new XmlWorkPage(_fileData, _fullFileName));
         SetLoading(false);
     }
 

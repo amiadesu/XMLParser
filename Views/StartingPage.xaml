@@ -1,91 +1,184 @@
-<ContentPage 
-    x:Class="XMLParser.Views.StartingPage"
-    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:locales="clr-namespace:XMLParser.Resources.Localization"
-    Title="{x:Static locales:AppResources.ApplicationName}">
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="XMLParser.Views.StartingPage"
+             BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1C1C1E}"
+             Padding="30">
 
-    <Grid Padding="20" RowDefinitions="Auto,*">
-        <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Padding="2" HorizontalOptions="Fill">
-            <Label Text="{x:Static locales:AppResources.HomePage}" 
-               FontSize="24" 
-               HorizontalOptions="Center" />
+    <Grid RowDefinitions="Auto,*,Auto"
+          ColumnDefinitions="2*,3*,3*"
+          ColumnSpacing="25"
+          RowSpacing="25">
+
+        <VerticalStackLayout Grid.Column="0" Spacing="20" VerticalOptions="Start">
+
+            <Label Text="Google Drive"
+                   FontAttributes="Bold"
+                   FontSize="22"
+                   HorizontalOptions="Center"
+                   TextColor="{AppThemeBinding Light=#000000, Dark=#FFFFFF}" />
+
+            <Label x:Name="UserEmailLabel"
+                   FontSize="14"
+                   HorizontalOptions="Center"
+                   TextColor="{AppThemeBinding Light=#000000, Dark=#FFFFFF}" />
+
+            <Button x:Name="AuthorizeButton"
+                    Text="Увійти"
+                    BackgroundColor="#7C3AED"
+                    TextColor="White"
+                    CornerRadius="10"
+                    HeightRequest="45"
+                    Clicked="OnAuthorizeClicked" />
+
+            <Button x:Name="LogoutButton"
+                    Text="Вийти"
+                    BackgroundColor="#7C3AED"
+                    TextColor="White"
+                    CornerRadius="10"
+                    HeightRequest="45"
+                    IsVisible="False"
+                    Clicked="OnLogoutClicked" />
+
+            <Button Text="Допомога"
+                    BackgroundColor="{AppThemeBinding Light=#E5E5EA, Dark=#3A3A3C}"
+                    TextColor="{AppThemeBinding Light=#000000, Dark=#FFFFFF}"
+                    CornerRadius="10"
+                    HeightRequest="45"
+                    Clicked="OnHelpClicked" />
 
             <ActivityIndicator x:Name="LoadingIndicator"
-                            IsRunning="False"
-                            IsVisible="False"
-                            WidthRequest="30"
-                            HeightRequest="30"
-                            HorizontalOptions="End"
-                            VerticalOptions="Center"/>
-        </Grid>
+                               IsVisible="False"
+                               IsRunning="False"
+                               Color="#7C3AED"
+                               HorizontalOptions="Center"
+                               VerticalOptions="CenterAndExpand" />
 
-        <Grid Grid.Row="1" ColumnDefinitions="2*,8*" ColumnSpacing="10">
-            <VerticalStackLayout Grid.Column="0" VerticalOptions="Start">
-                <Button Text="{x:Static locales:AppResources.OpenFile}"
-                        Clicked="OnOpenFilesClicked"
-                        Margin="5,10"
-                        BackgroundColor="#217346"
-                        TextColor="White"/>
+        </VerticalStackLayout>
 
-                <Button Text="{x:Static locales:AppResources.HelpPage}"
-                        Clicked="OnHelpPageClicked"
-                        Margin="5,10"
-                        BackgroundColor="#217346"
-                        TextColor="White"/>
+        <VerticalStackLayout Grid.Column="1" Spacing="20">
 
-                <Button Text="{x:Static locales:AppResources.GoogleDrive}"
-                        Clicked="OnViewGoogleDriveFilesClicked"
-                        Margin="5,10"
-                        BackgroundColor="#217346"
-                        TextColor="White"/>
-            </VerticalStackLayout>
+            <Border BackgroundColor="{AppThemeBinding Light=#F5F3FA, Dark=#2C2C2E}"
+                   Padding="20">
+                <VerticalStackLayout Spacing="10">
 
-            <Grid Grid.Column="1" RowDefinitions="Auto,*" Margin="5,0,5,5">
-                <Button Grid.Row="0"
-                        Text="{x:Static locales:AppResources.CreateNewSpreadsheet}"
-                        Clicked="OnOpenSpreadsheetClicked"
-                        Margin="5,10"
-                        BackgroundColor="#217346"
-                        TextColor="White"/>
+                    <Label Text="XML-файл"
+                           FontAttributes="Bold"
+                           FontSize="18"
+                           TextColor="{AppThemeBinding Light=#000000, Dark=#FFFFFF}" />
 
-                <Grid Grid.Row="1" RowDefinitions="Auto,*" Padding="10">
-                        <VerticalStackLayout Grid.Row="0" Spacing="8" Margin="0,0,0,8">
-                            <HorizontalStackLayout Spacing="10" Padding="2" HorizontalOptions="Center">
-                                <Label Text="{x:Static locales:AppResources.RecentFiles}" 
-                                       FontSize="16" 
-                                       FontAttributes="Bold"
-                                       VerticalOptions="Center"/>
-                                
-                                <Button Text="{x:Static locales:AppResources.Clear}"
-                                        Clicked="OnClearRecentFilesClicked"
-                                        VerticalOptions="Center"
-                                        BackgroundColor="#217346"
-                                        TextColor="White"/>
-                            </HorizontalStackLayout>
+                    <HorizontalStackLayout Spacing="12">
+                        <Button x:Name="XmlLocalButton"
+                                Text="Локально"
+                                BackgroundColor="#7C3AED"
+                                TextColor="White"
+                                Opacity="1"
+                                CornerRadius="8"
+                                Clicked="OnXmlLocalClicked" />
 
-                            <BoxView HeightRequest="1" 
-                                     Color="Gray" 
-                                     HorizontalOptions="Fill"/>
-                        </VerticalStackLayout>
+                        <Button x:Name="XmlDriveButton"
+                                Text="Drive"
+                                BackgroundColor="#7C3AED"
+                                TextColor="White"
+                                Opacity="0.5"
+                                CornerRadius="8"
+                                Clicked="OnXmlDriveClicked" />
+                    </HorizontalStackLayout>
 
-                        <Grid Grid.Row="1" RowDefinitions="*">
-                            <ScrollView>
-                                <VerticalStackLayout>
-                                        <Label Text="{x:Static locales:AppResources.NoRecentFiles}"
-                                                x:Name="NoRecentFilesLabel"
-                                                TextColor="Gray" 
-                                                HorizontalOptions="Center"
-                                                IsVisible="True"/>
+                    <Button x:Name="PickXmlButton"
+                            Text="Обрати XML"
+                            BackgroundColor="#7C3AED"
+                            TextColor="White"
+                            CornerRadius="10"
+                            HeightRequest="45"
+                            Clicked="OnPickXmlClicked" />
 
-                                        <VerticalStackLayout x:Name="RecentItemsContainer"
-                                                                Spacing="5"
-                                                                IsVisible="False" />
-                                </VerticalStackLayout>
-                            </ScrollView>
-                        </Grid>
-                </Grid>
-            </Grid>
-        </Grid>
+                    <Label x:Name="XmlSelectedLabel"
+                           Text="Файл не обрано"
+                           FontSize="13"
+                           TextColor="{AppThemeBinding Light=#000000, Dark=#FFFFFF}" />
+
+                    <VerticalStackLayout x:Name="XmlRecentContainer"
+                                         Spacing="5"
+                                         Padding="5,5,0,0" />
+                </VerticalStackLayout>
+            </Border>
+        </VerticalStackLayout>
+
+        <VerticalStackLayout Grid.Column="2" Spacing="20">
+
+            <Border BackgroundColor="{AppThemeBinding Light=#F5F3FA, Dark=#2C2C2E}"
+                   Padding="20">
+                <VerticalStackLayout Spacing="10">
+
+                    <Label Text="XSL-файл"
+                           FontAttributes="Bold"
+                           FontSize="18"
+                           TextColor="{AppThemeBinding Light=#000000, Dark=#FFFFFF}" />
+
+                    <HorizontalStackLayout Spacing="12">
+                        <Button x:Name="XslLocalButton"
+                                Text="Локально"
+                                BackgroundColor="#7C3AED"
+                                TextColor="White"
+                                Opacity="1"
+                                CornerRadius="8"
+                                Clicked="OnXslLocalClicked" />
+
+                        <Button x:Name="XslDriveButton"
+                                Text="Drive"
+                                BackgroundColor="#7C3AED"
+                                TextColor="White"
+                                Opacity="0.5"
+                                CornerRadius="8"
+                                Clicked="OnXslDriveClicked" />
+                    </HorizontalStackLayout>
+
+                    <Button x:Name="PickXslButton"
+                            Text="Обрати XSL"
+                            BackgroundColor="#7C3AED"
+                            TextColor="White"
+                            CornerRadius="10"
+                            HeightRequest="45"
+                            Clicked="OnPickXslClicked" />
+
+                    <Label x:Name="XslSelectedLabel"
+                           Text="Файл не обрано"
+                           FontSize="13"
+                           TextColor="{AppThemeBinding Light=#000000, Dark=#FFFFFF}" />
+
+                    <VerticalStackLayout x:Name="XslRecentContainer"
+                                         Spacing="5"
+                                         Padding="5,5,0,0" />
+                </VerticalStackLayout>
+            </Border>
+        </VerticalStackLayout>
+
+        <HorizontalStackLayout Grid.Row="2"
+                       Grid.ColumnSpan="3"
+                       HorizontalOptions="Center"
+                       Spacing="40"
+                       Padding="0,30,0,0">
+
+            <Button x:Name="ContinueButton"
+                    Text="Продовжити"
+                    BackgroundColor="#7C3AED"
+                    TextColor="White"
+                    CornerRadius="15"
+                    FontSize="18"
+                    HeightRequest="60"
+                    WidthRequest="220"
+                    IsEnabled="False"
+                    Clicked="OnContinueClicked" />
+
+            <Button x:Name="ClearHistoryButton"
+                    Text="Очистити історію"
+                    BackgroundColor="#7C3AED"
+                    TextColor="White"
+                    CornerRadius="15"
+                    FontSize="18"
+                    HeightRequest="60"
+                    WidthRequest="220"
+                    Clicked="OnClearHistoryClicked" />
+        </HorizontalStackLayout>
     </Grid>
 </ContentPage>
