@@ -20,49 +20,18 @@ public sealed class SaxSearchStrategy : IXmlSearchStrategy
         {
             xmlStream.Seek(0, SeekOrigin.Begin);
         }
-        
+
         var events = new List<StudentModel>();
         using var reader = XmlReader.Create(xmlStream, new XmlReaderSettings { Async = true, IgnoreWhitespace = true });
-
-        string? fullName = null, faculty = null, department = null, specialty = null, window = null, parType = null;
-        Dictionary<string, string> attrs = new();
 
         while (await reader.ReadAsync())
         {
             if (ct.IsCancellationRequested) break;
 
-            if (reader.NodeType == XmlNodeType.Element && reader.Name == "student")
+            var sm = await ReadStudent(reader, keyword, ct);
+            if (sm != null && MatchAttrs(sm.Attributes.ToDictionary(), attributeFilters))
             {
-                attrs.Clear();
-                if (reader.HasAttributes)
-                {
-                    while (reader.MoveToNextAttribute())
-                        attrs[reader.Name] = reader.Value;
-                    reader.MoveToElement();
-                }
-
-                if (!MatchAttrs(attrs, attributeFilters))
-                {
-                    await reader.SkipAsync();
-                    continue;
-                }
-
-                fullName = faculty = department = specialty = window = parType = null;
-
-                using var subTree = reader.ReadSubtree();
-                var sub = XDocument.Load(subTree);
-                fullName = sub.Root?.Element("fullname")?.Value;
-                faculty = sub.Root?.Element("faculty")?.Value;
-                department = sub.Root?.Element("department")?.Value;
-                specialty = sub.Root?.Element("specialty")?.Value;
-                window = sub.Root?.Element("eventWindow")?.Value;
-                parType = sub.Root?.Element("parliamentType")?.Value;
-                
-                var blob = string.Join(" ", new[] { fullName, faculty, department, specialty, window, parType }.Where(s => !string.IsNullOrWhiteSpace(s)));
-                if (string.IsNullOrWhiteSpace(keyword) || blob.Contains(keyword, StringComparison.OrdinalIgnoreCase))
-                {
-                    events.Add(new StudentModel(fullName ?? "", faculty ?? "", department ?? "", specialty ?? "", window ?? "", parType ?? "", new Dictionary<string, string>(attrs)));
-                }
+                events.Add(sm);
             }
         }
         return events;
@@ -87,6 +56,42 @@ public sealed class SaxSearchStrategy : IXmlSearchStrategy
             }
         }
         return dict;
+    }
+    
+    private async Task<StudentModel?> ReadStudent(XmlReader reader, string keyword, CancellationToken ct = default)
+    {
+        if (reader.NodeType != XmlNodeType.Element || reader.Name != "student")
+        {
+            return null;
+        }
+                
+        Dictionary<string, string> attrs = new();
+        if (reader.HasAttributes)
+        {
+            while (reader.MoveToNextAttribute())
+                attrs[reader.Name] = reader.Value;
+            reader.MoveToElement();
+        }
+
+        string? fullName = null, faculty = null, department = null, specialty = null, window = null, parType = null;
+
+        using var subTree = reader.ReadSubtree();
+        var sub = XDocument.Load(subTree);
+        fullName = sub.Root?.Element("fullname")?.Value;
+        faculty = sub.Root?.Element("faculty")?.Value;
+        department = sub.Root?.Element("department")?.Value;
+        specialty = sub.Root?.Element("specialty")?.Value;
+        window = sub.Root?.Element("eventWindow")?.Value;
+        parType = sub.Root?.Element("parliamentType")?.Value;
+
+        var blob = string.Join(" ", new[] { fullName, faculty, department, specialty, window, parType }.Where(s => !string.IsNullOrWhiteSpace(s)));
+
+        if (!string.IsNullOrWhiteSpace(keyword) && !blob.Contains(keyword, StringComparison.OrdinalIgnoreCase))
+        {
+            return null;
+        }
+
+        return new StudentModel(fullName ?? "", faculty ?? "", department ?? "", specialty ?? "", window ?? "", parType ?? "", new Dictionary<string, string>(attrs));
     }
 
     private static bool MatchAttrs(Dictionary<string, string> nodeAttrs, IReadOnlyDictionary<string, string> filter)
