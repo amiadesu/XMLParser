@@ -14,6 +14,11 @@ public sealed class LinqSearchStrategy : IXmlSearchStrategy
     public Task<IList<StudentModel>> SearchAsync(Stream xmlStream, string keyword,
         IReadOnlyDictionary<string, string> attributeFilters, CancellationToken ct = default)
     {
+        if (xmlStream.CanSeek)
+        {
+            xmlStream.Seek(0, SeekOrigin.Begin);
+        }
+        
         var doc = XDocument.Load(xmlStream);
         var q = from s in doc.Descendants("student")
                 let attrs = s.Attributes().ToDictionary(a => a.Name.LocalName, a => a.Value)

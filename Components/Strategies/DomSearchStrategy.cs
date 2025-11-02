@@ -14,6 +14,11 @@ public sealed class DomSearchStrategy : IXmlSearchStrategy
     public Task<IList<StudentModel>> SearchAsync(Stream xmlStream, string keyword,
         IReadOnlyDictionary<string, string> attributeFilters, CancellationToken ct = default)
     {
+        if (xmlStream.CanSeek)
+        {
+            xmlStream.Seek(0, SeekOrigin.Begin);
+        }
+        
         var list = new List<StudentModel>();
         var doc = new XmlDocument();
         doc.Load(xmlStream);

@@ -16,6 +16,11 @@ public sealed class SaxSearchStrategy : IXmlSearchStrategy
         IReadOnlyDictionary<string, string> attributeFilters,
         CancellationToken ct = default)
     {
+        if (xmlStream.CanSeek)
+        {
+            xmlStream.Seek(0, SeekOrigin.Begin);
+        }
+        
         var events = new List<StudentModel>();
         using var reader = XmlReader.Create(xmlStream, new XmlReaderSettings { Async = true, IgnoreWhitespace = true });
 
