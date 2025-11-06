@@ -35,11 +35,11 @@ namespace XMLParser.Views
         public string OriginalXml { get; private set; } = string.Empty;
         public string FilteredXml { get; private set; } = string.Empty;
         public string VisualText { get; private set; } = string.Empty;
-        public bool IsVisualTextVisible => !string.IsNullOrEmpty(VisualText) && ResultLines.Count == 0;
-        public bool IsResultsVisible => ResultLines.Count > 0;
+        public bool IsVisualTextVisible => !string.IsNullOrEmpty(VisualText) && TableRows.Count == 0;
+        public bool IsResultsVisible => TableRows.Count > 0;
         private byte[] _xmlBytes = Array.Empty<byte>();
 
-        public ObservableCollection<string> ResultLines { get; } = new();
+        public ObservableCollection<StudentRow> TableRows { get; } = new();
         public ObservableCollection<string> AttrKeys { get; } = new();
         public ObservableCollection<FilterItem> ActiveFilters { get; } = new();
         public ObservableCollection<string> Strategies { get; } = new() { "LINQ", "DOM", "SAX" };
@@ -195,7 +195,7 @@ namespace XMLParser.Views
 
         private void UpdateVisuals(IList<StudentModel>? items)
         {
-            ResultLines.Clear();
+            TableRows.Clear();
 
             if (items == null || items.Count == 0)
             {
@@ -204,15 +204,28 @@ namespace XMLParser.Views
                 return;
             }
 
-            var sb = new StringBuilder();
-            foreach (var item in items)
+            for (int i = 0; i < items.Count; i++)
             {
-                var card = BuildPrettyBlock(item);
-                ResultLines.Add(card);
-                sb.AppendLine(card).AppendLine();
-            }
-            VisualText = sb.ToString().TrimEnd();
+                var s = items[i];
+                var attrs = s.Attributes ?? new Dictionary<string, string>();
 
+                TableRows.Add(new StudentRow
+                {
+                    Index = i + 1,
+                    Id = attrs.TryGetValue("id", out var id) ? id : "",
+                    Group = attrs.TryGetValue("group", out var group) ? group : "",
+                    Dorm = attrs.TryGetValue("dorm", out var dorm) ? dorm : "",
+                    Year = attrs.TryGetValue("year", out var year) ? year : "",
+                    FullName = s.FullName,
+                    Faculty = s.Faculty,
+                    Department = s.Department,
+                    Specialty = s.Specialty,
+                    EventWindow = s.EventWindow,
+                    ParliamentType = s.ParliamentType
+                });
+            }
+
+            VisualText = "";
             FireVisualUpdates();
         }
 
