@@ -1,6 +1,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodels="clr-namespace:XMLParser.Views"
+             xmlns:models="clr-namespace:XMLParser.Models"
              x:Class="XMLParser.Views.XmlWorkPage"
              x:Name="RootPage"
              BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1C1C1E}"
@@ -124,17 +125,82 @@
                     <Label Text="Результати"
                            FontAttributes="Bold"
                            FontSize="16" />
-                    <CollectionView x:DataType="viewmodels:XmlWorkViewModel" ItemsSource="{Binding ResultLines}" IsVisible="{Binding IsResultsVisible}">
-                        <CollectionView.ItemTemplate>
-                            <DataTemplate x:DataType="x:String">
-                                <Border BackgroundColor="{AppThemeBinding Light=#F2F2F7, Dark=#3A3A3C}"
-                                       Padding="10"
-                                       Margin="0,4,0,0">
-                                    <Label Text="{Binding .}" FontSize="13" LineBreakMode="WordWrap" />
-                                </Border>
-                            </DataTemplate>
-                        </CollectionView.ItemTemplate>
-                    </CollectionView>
+                    <ScrollView
+                        Grid.Row="1"
+                        Grid.ColumnSpan="3"
+                        Orientation="Both"
+                        HorizontalScrollBarVisibility="Always"
+                        VerticalScrollBarVisibility="Always">
+                        <CollectionView
+                            x:DataType="viewmodels:XmlWorkViewModel"
+                            Grid.Row="1"
+                            Grid.ColumnSpan="3"
+                            ItemsSource="{Binding TableRows}"
+                            IsVisible="{Binding IsResultsVisible}">
+
+                            <CollectionView.ItemsLayout>
+                                <GridItemsLayout Orientation="Vertical" Span="1" />
+                            </CollectionView.ItemsLayout>
+
+                            <CollectionView.Header>
+                                <Grid Padding="5" ColumnSpacing="5">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="40"/>
+                                        <ColumnDefinition Width="80"/>
+                                        <ColumnDefinition Width="80"/>
+                                        <ColumnDefinition Width="80"/>
+                                        <ColumnDefinition Width="60"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="120"/>
+                                        <ColumnDefinition Width="120"/>
+                                        <ColumnDefinition Width="150"/>
+                                        <ColumnDefinition Width="150"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Label Text="#" FontAttributes="Bold" Grid.Column="0" />
+                                    <Label Text="ID" FontAttributes="Bold" Grid.Column="1" />
+                                    <Label Text="Group" FontAttributes="Bold" Grid.Column="2" />
+                                    <Label Text="Dorm" FontAttributes="Bold" Grid.Column="3" />
+                                    <Label Text="Year" FontAttributes="Bold" Grid.Column="4" />
+                                    <Label Text="Full Name" FontAttributes="Bold" Grid.Column="5" />
+                                    <Label Text="Faculty" FontAttributes="Bold" Grid.Column="6" />
+                                    <Label Text="Department" FontAttributes="Bold" Grid.Column="7" />
+                                    <Label Text="Specialty" FontAttributes="Bold" Grid.Column="8" />
+                                    <Label Text="Event Window" FontAttributes="Bold" Grid.Column="9" />
+                                </Grid>
+                            </CollectionView.Header>
+
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="models:StudentRow">
+                                    <Grid Padding="5" ColumnSpacing="5">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="40"/>
+                                            <ColumnDefinition Width="80"/>
+                                            <ColumnDefinition Width="80"/>
+                                            <ColumnDefinition Width="80"/>
+                                            <ColumnDefinition Width="60"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="120"/>
+                                            <ColumnDefinition Width="120"/>
+                                            <ColumnDefinition Width="150"/>
+                                            <ColumnDefinition Width="150"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <Label Text="{Binding Index}" Grid.Column="0" />
+                                        <Label Text="{Binding Id}" Grid.Column="1" />
+                                        <Label Text="{Binding Group}" Grid.Column="2" />
+                                        <Label Text="{Binding Dorm}" Grid.Column="3" />
+                                        <Label Text="{Binding Year}" Grid.Column="4" />
+                                        <Label Text="{Binding FullName}" Grid.Column="5" />
+                                        <Label Text="{Binding Faculty}" Grid.Column="6" />
+                                        <Label Text="{Binding Department}" Grid.Column="7" />
+                                        <Label Text="{Binding Specialty}" Grid.Column="8" />
+                                        <Label Text="{Binding EventWindow}" Grid.Column="9" />
+                                    </Grid>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </ScrollView>
                     <Label x:DataType="viewmodels:XmlWorkViewModel"
                            Text="{Binding VisualText}"
                            FontSize="14"
